@@ -45,3 +45,7 @@ conn = dbConnect(pg, user="postgres", password="postgres", host="localhost", por
 dbWriteTable(conn,'tweet', tweet_query, row.names=F, overwrite=F, append=T)
 dbWriteTable(conn,'hashtag', hashtag_query, row.names=F, overwrite=F, append=T)
 dbWriteTable(conn,'contains', contains_query, row.names=F, overwrite=F, append=T)
+
+##close the connection
+dbDisconnect(conn)
+dbUnloadDriver(pg)
