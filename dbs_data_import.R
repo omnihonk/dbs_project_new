@@ -18,7 +18,7 @@ likes <- as.numeric(data$favorite_count)
 time <- ymd_hms(data$time)
 id <- (1:(length(content)))
 ##make content db safe
-content <- iconv(content, "ASCII", "UTF-8", sub = "x")
+content <- iconv(content, "ASCII", "UTF-8", sub = "")
 tweet_query <- data.frame(ID=id, time=time, NoRetweets=retweets, handle=handle, NoFav=likes, content=content)
 
 #contains relation
@@ -32,6 +32,12 @@ contains <- unnest(temp)
 ##all hashtags to lower case.
 contains <- mutate(contains, label = tolower(label))
 contains_query <- (unique(contains))
+
+data <- mutate(data, all_hashtags=str_extract_all(data$text, "#\\s*\\w+"))
+all_hashtags <- select(data, all_hashtags)
+all_hashtags <- tolower(unique(unlist(all_hashtags)))
+good_hashtags <- unique(contains$label)
+bad_hashtags <- setdiff(all_hashtags, good_hashtags) 
 
 #hashtag relation
 hashtag_query <- data.frame(label = unique(contains$label))
@@ -49,3 +55,6 @@ dbWriteTable(conn,'contains', contains_query, row.names=F, overwrite=F, append=T
 ##close the connection
 dbDisconnect(conn)
 dbUnloadDriver(pg)
+
+
+
