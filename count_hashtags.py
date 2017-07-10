@@ -63,42 +63,15 @@ def main():
 
     #Traces vorbereiten
     traces=[]
-    buttons = []
-    list_of_lists_of_truth = []
-    k=0
     for i in date_by_hashtags_dict.keys():
-        list_of_truth = []
         x,y = set_values(date_by_hashtags_dict[i])
         trace = go.Bar( x = x, y = y, name = i)
 
-        for j in range(len(date_by_hashtags_dict)):
-            fact = list(date_by_hashtags_dict.keys())[j]
-            if fact == i:
-                list_of_truth.append(True)
-            else:
-                list_of_truth.append(False)
-        list_of_lists_of_truth.append(list_of_truth)
-
-        button = dict(
-                    args=['visible', list_of_lists_of_truth[k]],
-                    label='All',
-                    method='restyle'
-                )
-        buttons.append(button)
         traces.append(trace)
-        k += 1
-    layout = go.Layout(
-    updatemenus=list([
-        dict(
-            x=-0.05,
-            y=1,
-            yanchor='top',
-            buttons=buttons)]))
 
     #Plotten
     data=traces
-    fig = go.Figure(data=data, layout=layout)
-    print(buttons)
+    fig = go.Figure(data=data)
     plotly.offline.plot(data)
 
 if __name__ == '__main__':
